@@ -225,3 +225,30 @@ class CRMQuery(graphene.ObjectType):
 # This is the requirement for the project checker:
 class Query(CRMQuery, graphene.ObjectType):
     pass
+
+
+
+class UpdateLowStockProducts(graphene.Mutation):
+    message = graphene.String()
+    updated_products = graphene.List(graphene.String)
+
+    def mutate(self, info):
+        low_stock_products = Product.objects.filter(stock__lt=10)
+        updated_names = []
+
+        for product in low_stock_products:
+            product.stock += 10  # simulate restocking
+            product.save()
+            updated_names.append(f"{product.name}: {product.stock}")
+
+        msg = "Low stock products updated successfully." if updated_names else "No low stock products found."
+        return UpdateLowStockProducts(message=msg, updated_products=updated_names)
+
+class Mutation(graphene.ObjectType):
+    update_low_stock_products = UpdateLowStockProducts.Field()
+
+# ✅ Ensure Query class is already present
+class Query(CRMQuery, graphene.ObjectType):
+    pass
+
+schema = graphene.Schema(query=Query, mutation=Mutation)
