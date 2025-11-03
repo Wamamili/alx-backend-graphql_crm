@@ -7,6 +7,7 @@ from graphene_django.filter import DjangoFilterConnectionField
 from crm.models import Customer, Product, Order
 from crm.filters import CustomerFilter, ProductFilter, OrderFilter
 from crm.models import Product
+from crm.models import Customer, Order
 # =====================================
 # GraphQL Object Types
 # =====================================
@@ -253,3 +254,19 @@ class Query(CRMQuery, graphene.ObjectType):
     pass
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
+
+
+
+class CRMQuery(graphene.ObjectType):
+    total_customers = graphene.Int()
+    total_orders = graphene.Int()
+    total_revenue = graphene.Float()
+
+    def resolve_total_customers(self, info):
+        return Customer.objects.count()
+
+    def resolve_total_orders(self, info):
+        return Order.objects.count()
+
+    def resolve_total_revenue(self, info):
+        return sum(order.total_amount for order in Order.objects.all())

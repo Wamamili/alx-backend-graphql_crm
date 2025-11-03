@@ -170,3 +170,6 @@ websocket-client==1.8.0
 whitenoise==6.9.0
 yarl==1.22.0
 django-crontab==0.8.0
+celery==5.5.3
+django-celery-beat==2.5.0
+redis==4.5.0
