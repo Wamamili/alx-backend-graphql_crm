@@ -40,9 +40,14 @@ INSTALLED_APPS = [
     # Third-party
     'graphene_django',
     'django_filters',
+    'django_crontab',
 
     # Local
     'crm',
+]
+CRONJOBS = [
+    ('*/5 * * * *', 'crm.cron.log_crm_heartbeat'),
+    ('0 0 * * *', 'crm.cron.send_order_reminders'),
 ]
 
 MIDDLEWARE = [
