@@ -6,6 +6,7 @@ Queries the GraphQL endpoint for recent orders and logs reminders daily.
 
 import requests
 from datetime import datetime, timedelta
+from gql import gql, Client
 
 GRAPHQL_ENDPOINT = "http://localhost:8000/graphql"
 LOG_FILE = "/tmp/order_reminders_log.txt"
